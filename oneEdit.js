@@ -45,20 +45,20 @@ function oneEditAway (str1, str2) {
   let len2 = str2.length;
   let arr1 = str1.split('');
   let arr2 = str2.split('');
-  let changes = 0;
   
   // Determine length difference
   let lenDiff = Math.abs( len1 - len2 );
   
   
-  // If lenDiff is 0, then we just need to swap one character.
+  // If lenDiff is less than 2, it possibly could be fixed in one edit.
   if (lenDiff < 2 ) {
     // iterate till end of longer array
     for ( let i = 0; i < Math.max( len1, len2 ); i ++ ) {
-      //The first time they don't match, generate two copies.
+      //The first time they don't match, generate a copy.
       if ( arr1[i] !== arr2[i] ){
         let swapArr1 = arr1.slice();
         let swapArr2 = arr2.slice();
+        // Swap the non-matching character in our copy.
         swapArr2[ i ] = swapArr1[ i ];
 
         // If lengths don't match, cut down the longer one.
@@ -68,7 +68,7 @@ function oneEditAway (str1, str2) {
           arr2.splice(i, 1);
         }
         
-        // If either group matches, return true
+        // If either group matches, return true.  Else, it takes more than one edit.
         if ( swapArr1.join() === swapArr2.join() || arr1.join() === arr2.join() ) {
           return true;
         } else {
