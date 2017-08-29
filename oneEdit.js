@@ -50,11 +50,6 @@ function oneEditAway (str1, str2) {
   // Determine length difference
   let lenDiff = Math.abs( len1 - len2 );
   
-  // If length difference is greater than 1, return false immediately.
-  if ( lenDiff > 1 ) {
-    
-    return false;
-  }
   
   // If lenDiff is 0, then we just need to swap one character.
   if (lenDiff < 2 ) {
