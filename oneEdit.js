@@ -22,24 +22,22 @@ Problem:  Write a function that takes in two strings
      
     In any other case, return false.
     
+    ** Refactor Code to be more DRY **
+    
   Pseudo Code 
     Copy strings to arrays (easier to manipulate )
     Cache lengths of both strings.
     Determine lenDiff.
     
-    If lenDiff is 0
-      iterate through arrays and swap first non-matching character
-      compare and returh appropriately
-      
-    If lenDiff is 1 
-      If str1 is shorter
-      iterate through arr2
-        delete first character that doesn't match from arr2
-        compare and return 
-      else ( arr2 is shorter )
-      iterate through first array 
-        add first non-matching character to arr2
-        compare and return
+    If lenDiff is less than 2
+      iterate through string
+        First time they don't match
+          swap one character and join
+          delete from longer array and join
+          if either group matches, return true
+          else return false
+    
+    In another case, return false.
 */
 
 function oneEditAway (str1, str2) {
@@ -59,42 +57,27 @@ function oneEditAway (str1, str2) {
   }
   
   // If lenDiff is 0, then we just need to swap one character.
-  if (lenDiff === 0 ) {
-    // iterate through string
-    for ( let i = 0; i < len1; i ++ ) {
-      //The first time they don't match, swap and compare.
+  if (lenDiff < 2 ) {
+    // iterate till end of longer array
+    for ( let i = 0; i < Math.max( len1, len2 ); i ++ ) {
+      //The first time they don't match, generate two copies.
       if ( arr1[i] !== arr2[i] ){
-        //Replace str2's char with str1's char.
-        arr2[i] = arr1[i];
-        // Combine and compare
-        if ( arr2.join() === arr1.join()) {
-          return true;
-        }
-      }
-    }
-  }
-  
-  // if LenDiff is 1, we check which is longer
-  if ( lenDiff === 1 ) {
-    // If len1 is shorter, we iterate through arr2
-    if ( len1 < len2 ) {
-      for ( let i = 0; i < len2; i ++ ){
-        // Delete from arr2 when they don't match
-        if ( arr1[i] !== arr2[i] ){
+        let swapArr1 = arr1.slice();
+        let swapArr2 = arr2.slice();
+        swapArr2[ i ] = swapArr1[ i ];
+
+        // If lengths don't match, cut down the longer one.
+        if ( len1 > len2 ){
+          arr1.splice(i,1);
+        } else {
           arr2.splice(i, 1);
-          if ( arr1.join() === arr2.join() ){
-            return true;
-          }
         }
-      }
-    } else {
-        for ( let i = 0; i < len1; i ++ ){
-        // Add to arr2 when they don't match
-        if ( arr1[i] !== arr2[i] ){
-          arr2.splice(i,0, arr1[i]);
-          if ( arr1.join() === arr2.join() ){
-            return true;
-          }
+        
+        // If either group matches, return true
+        if ( swapArr1.join() === swapArr2.join() || arr1.join() === arr2.join() ) {
+          return true;
+        } else {
+          return false;
         }
       }
     }
@@ -105,4 +88,3 @@ function oneEditAway (str1, str2) {
   return false;
 }
 
-oneEditAway('pakes','pale');
